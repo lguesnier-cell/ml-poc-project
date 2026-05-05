@@ -15,12 +15,13 @@ Cette problématique soulève trois défis majeurs :
 
 ## 3. Description des Datasets
 
-### A. Dataset Principal : `cardio_train.csv`
+### A. Dataset Principal : `cardio_train.csv` : https://www.kaggle.com/datasets/sulianova/cardiovascular-disease-dataset
+
 * **Description :** 70 000 enregistrements de patients avec 12 variables (âge, sexe, taille, poids, pression artérielle, cholestérol, glucose, tabac, alcool, activité physique).
 * **Méthode de collecte :** Recueilli lors d'examens médicaux réels (Source : Kaggle).
 * **Justification du choix :** Volume important permettant un entraînement robuste et équilibre quasi-parfait des classes (50% de cas positifs / 50% négatifs).
 
-### B. Dataset d'Enrichissement : `Nhanes_cvd_raw.csv`
+### B. Dataset d'Enrichissement : `Nhanes_cvd_raw.csv` : https://www.kaggle.com/datasets/ahiduzzaman28/nhanes-cvd-raw-data-2017-23
 * **Description :** Données issues de l'enquête nationale NHANES (2017-2023) incluant des biomarqueurs avancés.
 * **Méthode de collecte :** Examens physiques et biologiques standardisés (CDC - États-Unis) (source : Kaggle)
 * **Justification du choix :** Apporte des variables critiques absentes du premier dataset comme la **Protéine C-réactive (marqueur d'inflammation)**, le **Sodium (sel)** et les **Graisses saturées** via une technique d'imputation par regroupement (Binning & Mapping) : les variables manquantes sont estimées en faisant la jointure entre les deux datasets sur des critères démographiques et cliniques communs (tranches d'âge, genre et niveau d'hypertension)
