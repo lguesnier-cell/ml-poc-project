@@ -7,6 +7,7 @@ that matter for their project.
 from __future__ import annotations
 
 from typing import Any
+from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_score
 
 
 def compute_metrics(y_true: Any, y_pred: Any) -> dict[str, float]:
@@ -23,6 +24,14 @@ def compute_metrics(y_true: Any, y_pred: Any) -> dict[str, float]:
       ``results/model_metrics.csv``.
     """
 
-    raise NotImplementedError(
-        "Implement metrics.compute_metrics() before running scripts/main.py."
-    )
+    # Calcul des métriques de classification
+    # Note : zero_division=0 permet d'éviter les erreurs si le modèle ne prédit aucune classe positive
+    
+    metrics = {
+        "accuracy": float(accuracy_score(y_true, y_pred)),
+        "precision": float(precision_score(y_true, y_pred, zero_division=0)),
+        "recall": float(recall_score(y_true, y_pred, zero_division=0)),
+        "f1": float(f1_score(y_true, y_pred, zero_division=0)),
+    }
+
+    return metrics
