@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
 from .features import preprocess_cardio_data, apply_feature_engineering
+from sklearn.preprocessing import StandardScaler
 
 def load_dataset_split():
     # On récupère le chemin du dossier racine du projet (un cran au-dessus de 'src')
@@ -34,8 +35,15 @@ def load_dataset_split():
     df_final = apply_feature_engineering(df_cardio, ref_table)
 
     # Étape 4 : Séparation et Split avec stratification[cite: 5]
+
+
     X = df_final.drop(columns=['cardio'])
     y = df_final['cardio']
 
-    # Test_size de 20% comme indiqué dans le dossier processed[cite: 5]
-    return train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+    scaler = StandardScaler()
+    X_train = pd.DataFrame(scaler.fit_transform(X_train), columns=X_train.columns)
+    X_test  = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns)
+
+    return X_train, X_test, y_train, y_test
