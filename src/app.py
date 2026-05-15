@@ -39,7 +39,7 @@ def show_eda_and_preprocessing():
     with tab_prepro:
         st.header("2. Nettoyage et Ingénierie des variables")
         st.write("""
-        D'après nos analyses dans le notebook, le pipeline de préparation suit ces étapes clés :
+        Le pipeline de préparation suit ces étapes clés :
         """)
         
         col1, col2 = st.columns(2)
@@ -58,8 +58,7 @@ def show_eda_and_preprocessing():
             - **Catégorisation de la tension :** Création de stades d'hypertension selon les normes médicales.
             - **Encodage :** One-Hot Encoding pour les variables catégorielles (Cholestérol, Glucose).
             """)
-        
-        st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Data_preprocessing_steps.png/600px-Data_preprocessing_steps.png", width=400, caption="Schéma du flux de données")
+    
 
 def show_model_logic():
     st.title("📊 Choix du Modèle et Performances")
@@ -114,37 +113,45 @@ def show_demo_page():
         return
 
     model = joblib.load(model_path)
-
     with st.form("demo_form"):
         st.write("Entrez les données du patient pour une évaluation instantanée :")
-        c1, c2 = st.columns(2)
+        c1, c2, c3 = st.columns(3)
         with c1:
-            age = st.number_input("Âge (ans)", 18, 100, 50)
+            age    = st.number_input("Âge (ans)", 18, 100, 50)
             weight = st.number_input("Poids (kg)", 30, 200, 75)
             height = st.number_input("Taille (cm)", 130, 220, 175)
+            gender = st.selectbox("Sexe", [1, 2], format_func=lambda x: "Femme" if x == 1 else "Homme")
         with c2:
-            ap_hi = st.slider("Tension Systolique (ap_hi)", 80, 220, 120)
-            chol = st.selectbox("Cholestérol", [1, 2, 3], format_func=lambda x: "Normal" if x==1 else "Élevé" if x==2 else "Très élevé")
-            smoke = st.checkbox("Fumeur")
+            ap_hi  = st.slider("Tension Systolique (ap_hi)", 80, 220, 120)
+            ap_lo  = st.slider("Tension Diastolique (ap_lo)", 50, 120, 80)
+            chol   = st.selectbox("Cholestérol", [1, 2, 3], format_func=lambda x: "Normal" if x==1 else "Élevé" if x==2 else "Très élevé")
+            gluc   = st.selectbox("Glucose", [1, 2, 3], format_func=lambda x: "Normal" if x==1 else "Élevé" if x==2 else "Très élevé")
+        with c3:
+            smoke  = st.checkbox("Fumeur")
+            alco   = st.checkbox("Consommation d'alcool")
+            active = st.checkbox("Activité physique régulière")
 
         submit = st.form_submit_button("Lancer le diagnostic")
 
     if submit:
-        # Reprise du preprocessing simplifié pour la démo
-        bmi = weight / ((height/100)**2)
-        # Création du vecteur d'entrée compatible avec le modèle
+        bmi = weight / ((height / 100) ** 2)
         input_df = pd.DataFrame([{
-            'age_years': age,
-            'ap_hi': ap_hi,
-            'bmi': bmi,
-            'smoke': int(smoke),
+            'gender':        gender,
+            'ap_hi':         ap_hi,
+            'ap_lo':         ap_lo,
+            'smoke':         int(smoke),
+            'alco':          int(alco),
+            'active':        int(active),
+            'age_years':     age,
+            'bmi':           bmi,
+            'Sodium':        2300.0,
+            'Saturated_Fat': 26.0,
             'cholesterol_2': 1 if chol == 2 else 0,
-            'cholesterol_3': 1 if chol == 3 else 0
+            'cholesterol_3': 1 if chol == 3 else 0,
+            'gluc_2':        1 if gluc == 2 else 0,
+            'gluc_3':        1 if gluc == 3 else 0,
         }])
-        
-        # Complétion des colonnes manquantes si nécessaire (XGBoost en a besoin)
-        # Note: ceci est un exemple, ajustez selon les colonnes exactes de votre modèle
-        
+
         prediction = model.predict(input_df)[0]
         proba = model.predict_proba(input_df)[0][1]
 
@@ -154,6 +161,5 @@ def show_demo_page():
         else:
             st.success(f"### Risque faible : {proba:.1%}")
             st.write("Les indicateurs cliniques sont dans la norme.")
-
 if __name__ == "__main__":
     build_app()
