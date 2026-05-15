@@ -87,22 +87,20 @@ def show_model_logic():
     else:
         st.warning("Fichier de métriques introuvable. Avez-vous lancé l'entraînement ?")
 
-    st.header("3. Comparaison Prédiction vs Réalité")
-    res_path = Path("results/test_results.csv")
-    if res_path.exists():
-        res_df = pd.read_csv(res_path)
-        c1, c2 = st.columns(2)
-        with c1:
-            st.write("**Matrice de Confusion**")
-            cm = confusion_matrix(res_df['y_true'], res_df['y_pred'])
-            fig, ax = plt.subplots()
-            sns.heatmap(cm, annot=True, fmt='d', cmap='Greens', ax=ax)
-            st.pyplot(fig)
-        with c2:
-            st.write("**Importance des Variables (Feature Importance)**")
-            st.write("Le modèle accorde le plus de poids à : **Pression Systolique**, **Âge** et **Cholestérol**.")
-    else:
-        st.info("Ajoutez un fichier 'results/test_results.csv' pour visualiser la performance réelle.")
+        st.header("3. Comparaison Prédiction vs Réalité")
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+        st.write("**Matrice de Confusion**")
+        st.image("plot/matrice.png")
+
+    with c2:
+        st.write("**Statut Cardiaque par Âge**")
+        st.image("plot/statut_cardiaque_age.png")
+
+    with c3:
+        st.write("**Variables importantes (XGBoost)**")
+        st.image("plot/variables_importantes_XGBoost.png")
 
 def show_demo_page():
     st.title("⚡ Démonstration Interactive")
