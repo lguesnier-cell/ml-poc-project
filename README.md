@@ -1,4 +1,4 @@
-# CardioCheck — Cardiovascular Disease Detection ML PoC
+# CardioCheck — Cardiovascular Disease Detection 
 
 ## Project Description
 
