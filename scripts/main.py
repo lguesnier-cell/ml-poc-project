@@ -31,6 +31,7 @@ APP_ENTRYPOINT = config.APP_ENTRYPOINT
 MODELS = config.MODELS
 STREAMLIT_HOST = config.STREAMLIT_HOST
 STREAMLIT_PORT = config.STREAMLIT_PORT
+sys.path.insert(0, str(SRC_DIR))
 
 data_module = _load_module("project_data", SRC_DIR / "data.py")
 metrics_module = _load_module("project_metrics", SRC_DIR / "metrics.py")

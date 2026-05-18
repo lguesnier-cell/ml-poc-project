@@ -33,9 +33,9 @@ STREAMLIT_PORT = 8501
 # Students must replace this example with their trained models.
 # Each entry must point to a serialized model saved as `.joblib`, `.pkl`, or `.pickle`.
 MODELS = {
-    "model_a": {
-        "name": "Model A",
-        "description": "A simple baseline model.",
-        "path": MODELS_DIR / "model_a.pkl",
+    "xgboost": {
+        "name": "XGBoost Optimisé",
+        "description": "XGBoost optimisé via Optuna, maximisant le rappel.",
+        "path": MODELS_DIR / "xgboost_optimized.pkl",
     },
 }

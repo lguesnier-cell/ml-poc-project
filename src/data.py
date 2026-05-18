@@ -1,7 +1,8 @@
 import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
-from .features import preprocess_cardio_data, apply_feature_engineering
+from features import preprocess_cardio_data, apply_feature_engineering
+
 
 def load_dataset_split():
     # On récupère le chemin du dossier racine du projet (un cran au-dessus de 'src')
