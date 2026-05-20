@@ -8,7 +8,6 @@ from pathlib import Path
 from sklearn.metrics import confusion_matrix, classification_report
 
 # Importation de la config pour les chemins officiels
-from config import MODEL_METRICS_FILE
 
 def build_app() -> None:
     st.set_page_config(page_title="CardioCheck ML PoC", layout="wide")
@@ -77,17 +76,17 @@ def show_model_logic():
     """)
 
     st.header("2. Analyse des Métriques")
-    if MODEL_METRICS_FILE.exists():
-        metrics_df = pd.read_csv(MODEL_METRICS_FILE)
-        st.subheader("Comparaison des scores")
-        st.dataframe(metrics_df.style.highlight_max(axis=0, subset=['recall'], color='#90ee90'))
-        
-        st.write("**Métrique cible : Rappel (Recall)**. En diagnostic médical, il est préférable d'avoir quelques 'fausses alertes' "
-                 "plutôt que de passer à côté d'un cas grave.")
-    else:
-        st.warning("Fichier de métriques introuvable. Avez-vous lancé l'entraînement ?")
+    metrics_df = pd.DataFrame([
+        {"Modèle": "Baseline (LogReg)",  "Accuracy": 0.7229, "Precision": 0.7478, "Recall": 0.6635, "F1": 0.7031},
+        {"Modèle": "Random Forest",      "Accuracy": 0.6849, "Precision": 0.6780, "Recall": 0.6912, "F1": 0.6845},
+        {"Modèle": "XGBoost Optimisé",   "Accuracy": 0.5571, "Precision": 0.5280, "Recall": 0.9857, "F1": 0.6876},
+    ])
+    st.subheader("Comparaison des scores")
+    st.dataframe(metrics_df.style.highlight_max(axis=0, subset=['Recall'], color='#90ee90'))
+    st.write("**Métrique cible : Rappel (Recall)**. En diagnostic médical, il est préférable d'avoir quelques 'fausses alertes' "
+             "plutôt que de passer à côté d'un cas grave.")
 
-        st.header("3. Comparaison Prédiction vs Réalité")
+    st.header("3. Comparaison Prédiction vs Réalité")
     c1, c2, c3 = st.columns(3)
 
     with c1:
